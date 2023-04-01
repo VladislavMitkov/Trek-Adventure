@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getAllPosts } from "../../firebase/postsApi";
 // context
 import { UserAuth } from "../context/AuthContext";
+import SingleBlogPost from "../SingleBlogPost/SingleBlogPost";
 const MyProfile = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,8 +18,7 @@ const MyProfile = () => {
       setPosts(myPosts);
       setIsLoading(false);
     });
-  },);
-
+  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -37,14 +37,15 @@ const MyProfile = () => {
         </Link>
         <AiOutlinePlusCircle />
       </section>
-      <main>
+      <main className="text-center">
         <h1> My blog posts</h1>
         <div>
-          {posts?.map((post) => (
+          {/* {posts?.map((post) => (
             <div key={post.id}>
               <h1>{post.title}</h1>
             </div>
-          ))}
+          ))} */}
+          <SingleBlogPost />
         </div>
       </main>
     </div>

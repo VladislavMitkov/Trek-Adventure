@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -9,12 +10,13 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyACgOVsAlqnuMlhhDhpiRaiuBr0ZtyDHUU",
-	authDomain: "wanderland-95cbd.firebaseapp.com",
-	projectId: "wanderland-95cbd",
-	storageBucket: "wanderland-95cbd.appspot.com",
-	messagingSenderId: "158271986618",
-	appId: "1:158271986618:web:d0fab64b5a8cc72d72db83",
+	apiKey: "AIzaSyCk_7XF3YBf4nIdfSCAUqrPHxA98pt7tjM",
+	authDomain: "trekadventure-25ee2.firebaseapp.com",
+	projectId: "trekadventure-25ee2",
+	storageBucket: "trekadventure-25ee2.appspot.com",
+	messagingSenderId: "953460068584",
+	appId: "1:953460068584:web:cd6628b9895aba5c0e795d",
+	measurementId: "G-82K6FCVC6Y",
 };
 
 // Initialize Firebase
@@ -24,6 +26,8 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 //db
 export const db = getFirestore(app);
+
+const analytics = getAnalytics(app);
 export const storage = getStorage(app);
 
 export default app;

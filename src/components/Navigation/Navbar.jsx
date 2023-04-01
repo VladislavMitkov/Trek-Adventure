@@ -23,16 +23,16 @@ const Navbar = () => {
       const res = await fetch(url);
       const blob = await res.blob();
       const image = URL.createObjectURL(blob);
-
+      console.log("RUN");
       setProfileImage(image);
     }
 
-    if (user.photoURL) {
+    if (user?.photoURL) {
       downloadImage(user.photoURL);
     } else {
       setProfileImage(null);
     }
-  }, [user.photoURL]);
+  }, [user]);
 
   const handleClick = () => {
     setNav(!nav);
@@ -46,7 +46,6 @@ const Navbar = () => {
       console.log(err.message);
     }
   };
-  console.log("user:", user.photoURL);
 
   return (
     <div className="bg-green-300 h-16 w-full flex items-center justify-between sticky top-0">
