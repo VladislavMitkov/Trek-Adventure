@@ -1,11 +1,14 @@
-import { auth, db } from "./firebase";
+import { auth, db, storage } from "./firebase";
 import {
 	addDoc,
 	collection,
 	deleteDoc,
 	doc,
 	getDocs,
+	getDoc,
+	updateDoc,
 } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const postsColRef = collection(db, "blogs");
 
@@ -31,31 +34,67 @@ export const getMyPosts = async () => {
 	);
 	return filteredData;
 };
+// get blogpost by id
+export const getSingleBlogPost = async (blogId) => {
+	const docRef = doc(db, "blogs", blogId);
 
-// create blog post
+	const singleBlog = await getDoc(docRef).then((doc) => {
+		doc.data();
+	});
+	return singleBlog;
+};
+
+// create blog post with first uploading the image to the cloud
 export const onSubmitBlogPost = async ({
 	title,
 	date,
 	category,
 	description,
-	imageUrls,
+	image,
 }) => {
 	try {
-		await addDoc(postsColRef, {
-			title: title,
-			date,
-			category,
-			description,
-			imageUrls,
-			userId: auth?.currentUser?.uid,
-		});
+		const storageRef = ref(storage, `images/${image.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, image);
+		uploadTask.on(
+			"state_changed",
+			() => {},
+			(error) => {
+				console.log(error);
+			},
+			() => {
+				getDownloadURL(storageRef).then(async (url) => {
+					try {
+						await addDoc(postsColRef, {
+							title: title,
+							date,
+							category,
+							description,
+							imageUrls: url,
+							userId: auth?.currentUser?.uid,
+							userName: auth?.currentUser?.displayName,
+						});
+					} catch (error) {
+						console.log(error);
+					}
+				});
+			},
+		);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
 // delete blog posts
-export const DeleteBlogPost = async (id) => {
+export const DeleteBlogPost = (id) => {
 	const blogDoc = doc(db, "blogs", id);
-	await deleteDoc(blogDoc);
+	deleteDoc(blogDoc)
+		.then(() => {
+			console.log("Blog was deleted");
+		})
+		.catch((error) => {
+			console.log(error);
+		});
 };
+
+// updating blog post
+

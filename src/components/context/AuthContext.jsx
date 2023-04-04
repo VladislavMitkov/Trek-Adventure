@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase/firebase";
 // toastify
 
@@ -20,8 +20,13 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   // create user with email and password
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const createUser = async (username, email, password) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password).catch((err) => console.log(err));
+      await updateProfile(auth.currentUser, { displayName: username }).catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const logout = () => {

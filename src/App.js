@@ -12,6 +12,8 @@ import { AuthContextProvider } from "./components/context/AuthContext";
 import AllBlogs from "./components/AllBlogs/AllBlogs";
 import MyProfile from "./components/Accounts/MyProfile";
 import CreatePost from "./components/CreateBlogPost/CreatePost";
+import FullBlogPost from "./components/SingleBlogPost/FullBlogPost";
+import EditBlogPost from "./components/EditBlogPost/EditBlogPost";
 
 function App() {
 	return (
@@ -26,6 +28,8 @@ function App() {
 						<Route path='/explore' element={<AllBlogs />} />
 						<Route path='/myProfile' element={<MyProfile />} />
 						<Route path='/createPost' element={<CreatePost />} />
+						<Route path="/fullBlogPost/:id" element={<FullBlogPost />} />
+						<Route path="/editBlogPost/:id" element={<EditBlogPost />} />
 					</Routes>
 					<div className=" insent-x-0 bottom-0 justify-center w-full ">
 						<Footer />

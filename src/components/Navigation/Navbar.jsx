@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 // context
 import { UserAuth } from "../context/AuthContext";
-import { storage } from "../../firebase/firebase";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -18,21 +17,21 @@ const Navbar = () => {
 
   const { user, logout } = UserAuth();
 
-  useEffect(() => {
-    async function downloadImage(url) {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const image = URL.createObjectURL(blob);
-      console.log("RUN");
-      setProfileImage(image);
-    }
+  // useEffect(() => {
+  //   async function downloadImage(url) {
+  //     const res = await fetch(url);
+  //     const blob = await res.blob();
+  //     const image = URL.createObjectURL(blob);
+  //     console.log("RUN");
+  //     setProfileImage(image);
+  //   }
 
-    if (user?.photoURL) {
-      downloadImage(user.photoURL);
-    } else {
-      setProfileImage(null);
-    }
-  }, [user]);
+  //   if (user?.photoURL) {
+  //     downloadImage(user.photoURL);
+  //   } else {
+  //     setProfileImage(null);
+  //   }
+  // }, [user]);
 
   const handleClick = () => {
     setNav(!nav);
@@ -48,30 +47,28 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-green-300 h-16 w-full flex items-center justify-between sticky top-0">
+    <div className="shadow-xl mb-2 h-16 w-full flex items-center justify-between sticky top-0 bg-inherit">
       <header className="flex ml-5 justify-center items-center">
         <Link to="/">
-          <img src="logo-1.png" alt="logo" className="w-10 h-10" />
+          <img src="logo.png" alt="logo" className="w-20 h-16" />
         </Link>
       </header>
       <div className="flex items-center mr-10 text-xl font-sans font-semibold ">
         <nav className="md:flex hidden  justify-center items-center">
-          <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300" to="/">
+          <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/">
             Home
           </Link>
-          <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300" to="/explore">
+          <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/explore">
             Explore
           </Link>
-          <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300" to="/myProfile">
-            My Profile
-          </Link>
+
           {/*  if user is not logged */}
           {!user && (
             <div className="flex">
-              <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300 flex items-center" to="/signIn">
+              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300 flex items-center" to="/signIn">
                 Sign In
               </Link>
-              <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300" to="/signUp">
+              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/signUp">
                 Sign Up
               </Link>
             </div>
@@ -79,10 +76,13 @@ const Navbar = () => {
           {/*  if USER is logged  */}
           {user && (
             <>
-              <div className="flex justify-center items-center mr-6 w-10 h-10 rounded-2xl border-nofull hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300 ease-in-out">
+              {/* <div className="flex justify-center items-center mr-6 w-10 h-10 rounded-2xl border-nofull hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300 ease-in-out">
                 {profileImage && <img src={profileImage} alt="avatar" className="rounded-2xl" />}
-              </div>
-              <Link className="p-2 mr-10 rounded-full hover:scale-[1.5] hover:shadow-xl hover:shadow-blue-100 transition duration-300" to="/" onClick={handleLogout}>
+              </div> */}
+              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/myProfile">
+                My Profile
+              </Link>
+              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/" onClick={handleLogout}>
                 Sign Out
               </Link>
             </>

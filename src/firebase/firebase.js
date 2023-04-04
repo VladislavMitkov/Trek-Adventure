@@ -27,7 +27,7 @@ export const googleProvider = new GoogleAuthProvider();
 //db
 export const db = getFirestore(app);
 
-const analytics = getAnalytics(app);
+//cloud storage for the images
 export const storage = getStorage(app);
 
 export default app;
