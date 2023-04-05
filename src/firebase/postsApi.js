@@ -35,14 +35,14 @@ export const getMyPosts = async () => {
 	return filteredData;
 };
 // get blogpost by id
-export const getSingleBlogPost = async (blogId) => {
-	const docRef = doc(db, "blogs", blogId);
+// export const getSingleBlogPost = async (blogId) => {
+// 	const docRef = doc(db, "blogs", blogId);
 
-	const singleBlog = await getDoc(docRef).then((doc) => {
-		doc.data();
-	});
-	return singleBlog;
-};
+// 	const singleBlog = await getDoc(docRef).then((doc) => {
+// 		doc.data();
+// 	});
+// 	return singleBlog;
+// };
 
 // create blog post with first uploading the image to the cloud
 export const onSubmitBlogPost = async ({

@@ -10,7 +10,7 @@ import SignUp from "./components/SignUp/SignUp";
 // context
 import { AuthContextProvider } from "./components/context/AuthContext";
 import AllBlogs from "./components/AllBlogs/AllBlogs";
-import MyProfile from "./components/Accounts/MyProfile";
+import Profile from "./components/Accounts/Profile";
 import CreatePost from "./components/CreateBlogPost/CreatePost";
 import FullBlogPost from "./components/SingleBlogPost/FullBlogPost";
 import EditBlogPost from "./components/EditBlogPost/EditBlogPost";
@@ -26,7 +26,7 @@ function App() {
 						<Route path='/signIn' element={<SignIn />} />
 						<Route path='/signUp' element={<SignUp />} />
 						<Route path='/explore' element={<AllBlogs />} />
-						<Route path='/myProfile' element={<MyProfile />} />
+						<Route path='/profile/:id' element={<Profile />} />
 						<Route path='/createPost' element={<CreatePost />} />
 						<Route path="/fullBlogPost/:id" element={<FullBlogPost />} />
 						<Route path="/editBlogPost/:id" element={<EditBlogPost />} />

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // context
 import { UserAuth } from "../context/AuthContext";
+const imageSrc = require("../../assets/logo.png");
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -50,7 +51,7 @@ const Navbar = () => {
     <div className="shadow-xl mb-2 h-16 w-full flex items-center justify-between sticky top-0 bg-inherit">
       <header className="flex ml-5 justify-center items-center">
         <Link to="/">
-          <img src="logo.png" alt="logo" className="w-20 h-16" />
+          <img src={imageSrc} alt="logo" className="w-20 h-16" />
         </Link>
       </header>
       <div className="flex items-center mr-10 text-xl font-sans font-semibold ">
@@ -79,7 +80,7 @@ const Navbar = () => {
               {/* <div className="flex justify-center items-center mr-6 w-10 h-10 rounded-2xl border-nofull hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300 ease-in-out">
                 {profileImage && <img src={profileImage} alt="avatar" className="rounded-2xl" />}
               </div> */}
-              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/myProfile">
+              <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to={`/profile/${user.uid}`}>
                 My Profile
               </Link>
               <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to="/" onClick={handleLogout}>

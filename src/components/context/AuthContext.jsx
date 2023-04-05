@@ -1,7 +1,6 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase/firebase";
-// toastify
 
 const UserContext = createContext();
 
@@ -33,7 +32,7 @@ export const AuthContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const signIn = (email, password) => {
+  const signIn = ( email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 

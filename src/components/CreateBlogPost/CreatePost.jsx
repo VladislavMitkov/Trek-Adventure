@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onSubmitBlogPost } from "../../firebase/postsApi";
+import { UserAuth } from "../context/AuthContext";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ const CreatePost = () => {
   const [category, setCategory] = useState("mountain");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+
+  const { user } = UserAuth();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -19,9 +22,12 @@ const CreatePost = () => {
       description,
       image,
     });
-    navigate("/myProfile");
+    navigate(`/profile/${user.uid}`);
   };
-  console.log(image);
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="h-screen">
@@ -96,7 +102,7 @@ const CreatePost = () => {
                 Create
               </button>
               <button
-                type="submit"
+                onClick={handleCancel}
                 className="flex justify-center items-center mt-5 mb-5 rounded-xl border border-r-2 p-2 shadow-lg border-blue-200  hover:scale-[1.5] transition duration-300 ease-in-out hover:shadow-blue-600"
               >
                 Cancel
