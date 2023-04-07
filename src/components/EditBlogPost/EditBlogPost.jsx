@@ -1,38 +1,42 @@
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../../firebase/firebase";
 import { useNavigate, useParams } from "react-router-dom";
+import { getBlogPostById, updateBlogPost } from "../../firebase/postsApi";
+import { validateEditBlogPost } from "./EditBlogPostValidation";
 
 const EditBlogPost = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [newDescription, setNewDescription] = useState("");
-  const [newDate, setNewDate] = useState("");
-  const [newCategory, setNewCategory] = useState("");
+  const date = new Date();
+  const [newCategory, setNewCategory] = useState("Mountain");
   const [newTitlte, setnewTitlte] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const docRef = doc(db, "blogs", id);
-    const unsubDoc = onSnapshot(docRef, (doc) => {
-      setBlog(doc.data());
-    });
-  }, [id]);
+    getBlogPostById(id, setBlog);
+    setnewTitlte(blog?.title);
+    setNewCategory(blog?.category);
+    setNewDescription(blog?.description);
+  }, [id, blog?.title]);
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
-
-    const docRef = doc(db, "blogs", id);
+    const isValid = validateEditBlogPost(newTitlte, newDescription, setError);
+    if (!isValid) {
+      return;
+    }
     try {
-      await updateDoc(docRef, {
+      updateBlogPost(id, {
         title: newTitlte,
         description: newDescription,
-        date: newDate,
+        date: date.toLocaleString(),
         category: newCategory,
+      }).then(() => {
+        navigate(-1);
       });
-      navigate(-1);
     } catch (error) {
-      console.log(error);
+      setError(true);
     }
   };
 
@@ -54,20 +58,20 @@ const EditBlogPost = () => {
               <input
                 type="text"
                 name="title"
-                required
                 placeholder={blog?.title}
                 className="rounded-xl p-2 outline-none focus:shadow-blue-500 focus:shadow-lg"
                 value={newTitlte}
                 onChange={(e) => setnewTitlte(e.target.value)}
               />
             </div>
+            {error && <p className="text-red-700 font-light">The title must be longer than 3 symbols.</p>}
             <div className="flex gap-1">
-              <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
+              {/* <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
                 <label htmlFor="date" className="font-sans text-gray-800">
                   Date:
                 </label>
                 <input type="date" name="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} className="rounded-xl p-2 outline-none focus:shadow-blue-500 focus:shadow-lg" />
-              </div>
+              </div> */}
               <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
                 <label htmlFor="category" className="font-sans text-gray-800">
                   Category:
@@ -87,7 +91,6 @@ const EditBlogPost = () => {
               <textarea
                 type="text"
                 name="description"
-                required
                 placeholder={blog?.description}
                 rows="3"
                 cols="50"
@@ -97,6 +100,7 @@ const EditBlogPost = () => {
                 onChange={(e) => setNewDescription(e.target.value)}
               />
             </div>
+            {error && <p className="text-red-700 font-light">The title must be longer than 20 symbols.</p>}
 
             <footer className="flex gap-3">
               <button

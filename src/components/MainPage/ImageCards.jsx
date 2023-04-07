@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { UserAuth } from "../context/AuthContext";
-
 import { getAllPosts } from "../../firebase/postsApi";
 
 const ImageCards = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = UserAuth();
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,10 +22,10 @@ const ImageCards = () => {
           .map((post) => (
             <div key={post.id} className=" flex flex-col justify-between rounded-xl border border-slate-600  hover:cursor-pointer hover:shadow-2xl hover:shadow-blue-300">
               <div className="w-[320px] h-[350px]">
-                <img src={post.imageUrls} alt="" className="w-full h-[200px] object-cover rounded-t-xl " />
+                <img src={post.imageUrl} alt="" className="w-full h-[200px] object-cover rounded-t-xl " />
                 <div className=" text-center">
                   <h1 className="text-2xl font-semibold text-gray-800">{post.title}</h1>
-                  <p className="text-xl font-sans truncate">{post.userName}</p>
+                  <p className="text-xl font-sans truncate">{post.username}</p>
                   <Link to={`/fullBlogPost/${post.id}`}>
                     <button className=" mt-5 p-2 rounded-full px-6 shadow shaodw-2xl shadow-black hover:shadow-blue-400 hover:scale-[1.25] transition duration-300">Learn more...</button>
                   </Link>

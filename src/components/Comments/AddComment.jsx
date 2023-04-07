@@ -2,23 +2,29 @@ import React, { useState } from "react";
 import { addComment } from "../../firebase/CommentsApi";
 import { useParams } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import Comments from "./Comments";
 
 const AddComment = () => {
   const { id } = useParams();
   const [comment, setComment] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const time = new Date();
+  const [error, setError] = useState("false");
 
   const { user } = UserAuth();
 
   const onCommentSubmit = (e) => {
     e.preventDefault();
-    addComment({
-      content: comment,
-      currentTime: currentTime.toLocaleTimeString(),
-      username: user?.displayName,
-      blogId: id,
-    });
-    setComment("");
+    try {
+      addComment({
+        content: comment,
+        currentTime: time.toLocaleTimeString(),
+        username: user?.displayName,
+        blogId: id,
+      });
+      setComment("");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -30,7 +36,9 @@ const AddComment = () => {
           Send
         </button>
       </form>
-      <section></section>
+      <section>
+        <Comments />
+      </section>
     </div>
   );
 };

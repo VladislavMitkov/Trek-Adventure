@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { UserAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import ErrorModal from "../ErrorModal/ErrorModal";
+import { validateForm } from "./SignUpValidation";
 
 const SignUp = () => {
   const notify = () => toast("You Signed In Successfully");
@@ -17,44 +17,23 @@ const SignUp = () => {
 
   const { createUser, signInWithGoogle } = UserAuth();
 
-  const validateEmail = (email) => {
-    const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return reg.test(String(email).toLowerCase());
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (username.length < 3) {
-      setError({
-        title: "Invalid input!",
-        message: "Please enter a valid username.",
-      });
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError({
-        title: "Invalid Email!",
-        message: "Please enter a valid email.",
-      });
-      return;
-    }
-    if (password.length < 6) {
-      setError({
-        title: "Invalid input!",
-        message: "Please enter longer password.",
-      });
+    const isValid = validateForm(username, email, password, setError);
+    if (!isValid) {
       return;
     }
     try {
       await createUser(username, email, password);
-      navigate("/");
+      console.log()
+      navigate("/profileInfo");
     } catch (err) {
       alert(err.message);
     }
   };
   // prevent user to enter spaces
   const handleKeyDown = (e) => {
+    setError(false);
     if (e.key === " ") {
       setError({
         title: "Invalid input!",
@@ -65,19 +44,17 @@ const SignUp = () => {
   };
 
   const handleSignInWithGoogle = async (e) => {
-    setError("");
     try {
       await signInWithGoogle();
       notify();
       navigate("/");
     } catch (error) {
-      setError(error.message);
+      console.log(error.message);
     }
   };
 
   return (
     <>
-      {error && <ErrorModal onConfirm={() => setError(null)} title={error.title} message={error.message} />}
       <div className="h-screen">
         <div className=" box-border flex justify-center mt-10">
           <div className="flex w-8/12 justify-center rounded-xl shadow-xl shadow-blue-100">
@@ -100,20 +77,24 @@ const SignUp = () => {
                   </label>
                   <input
                     type="text"
+                    name="username"
+                    id="username"
                     placeholder="Username"
-                    className="border border-gray-400 py-1 px-2"
+                    className=" border border-gray-400 py-1 px-2"
                     value={username}
                     onKeyDown={handleKeyDown}
                     onChange={(e) => {
                       setUsername(e.target.value);
                     }}
                   />
+                  {error && <p className="text-red-700 font-light">Your username must be longer than 3 symbols and spaces can't be used</p>}
                   <label htmlFor="password" className="text-gray-600 text-center font-sans font-semibold text-xl">
                     Password
                   </label>
 
                   <input
                     type="password"
+                    name="password"
                     placeholder="password"
                     className="border border-gray-400 py-1 px-2"
                     value={password}
@@ -122,6 +103,7 @@ const SignUp = () => {
                       setPassword(e.target.value);
                     }}
                   />
+                  {error && <p className=" text-red-700 font-light line-clamp-2">Password must be longer than 6 symbols</p>}
                   <label htmlFor="email" className="text-gray-600 text-center font-sans font-semibold text-xl">
                     email
                   </label>
@@ -130,10 +112,12 @@ const SignUp = () => {
                     placeholder="email"
                     className="border border-gray-400 py-1 px-2"
                     value={email}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
                   />
+                  {error && <p className=" text-red-700 font-light line-clamp-2">Please enter correct email.</p>}
                   <button className="flex justify-center items-center mt-5 mb-5 rounded-xl border border-r-2 p-2 shadow-lg border-blue-200  hover:scale-[1.5] transition duration-300 ease-in-out hover:shadow-blue-600">
                     Sign up
                   </button>

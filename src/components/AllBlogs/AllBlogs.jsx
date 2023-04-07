@@ -13,6 +13,7 @@ const AllBlogs = () => {
     setIsLoading(true);
     getAllPosts().then((data) => {
       setPosts(data);
+      setCategory(data);
       setIsLoading(false);
     });
   }, []);
@@ -21,8 +22,6 @@ const AllBlogs = () => {
     const filteredPosts = posts.filter((post) => post.category === cat);
     setCategory(filteredPosts);
   };
-
-  console.log(category);
 
   return (
     <section className="text-gray-400 body-font">
@@ -48,15 +47,21 @@ const AllBlogs = () => {
               </button>
             </div>
             <div className="flex flex-wrap -m-4">
+              {isLoading && <p className="m-auto mt-36 text-gray-800 font-semibold text-4xl">Loading blogs...</p>}
+              {category?.length === 0 && !isLoading && (
+                <div className="m-auto mt-36">
+                  <p className="text-gray-800 font-semibold text-4xl ">There are no blogs in this category</p>
+                </div>
+              )}
               {category.map((post) => (
                 <div className="p-4 md:w-1/3" key={post.id}>
                   <div className="h-full border-2 border-gray-800 rounded-lg ">
-                    <img className="lg:h-48 md:h-36 w-full object-cover object-center" src={post.imageUrls} alt="post" />
+                    <img className="lg:h-72 md:h-36 w-full object-cover overflow-hidden" loading="lazy" src={post.imageUrl} alt="post" />
                     <div className="p-6">
                       <h2 className="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">CATEGORY : {post.category}</h2>
                       <h1 className="title-font text-lg font-medium text-white mb-3">{post.title}</h1>
                       <Link to={`/profile/${post.userId}`} className="title-font text-lg font-medium text-white mb-3 cursor-pointer">
-                        {post.userName}
+                        {post.username}
                       </Link>
                       <p className="leading-relaxed mb-3 text-white line-clamp-6">{post.description}</p>
                       <div className="flex items-center flex-wrap ">

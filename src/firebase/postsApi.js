@@ -5,10 +5,13 @@ import {
 	deleteDoc,
 	doc,
 	getDocs,
-	getDoc,
 	updateDoc,
+	onSnapshot,
+	where,
+	query,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 const postsColRef = collection(db, "blogs");
 
@@ -34,15 +37,6 @@ export const getMyPosts = async () => {
 	);
 	return filteredData;
 };
-// get blogpost by id
-// export const getSingleBlogPost = async (blogId) => {
-// 	const docRef = doc(db, "blogs", blogId);
-
-// 	const singleBlog = await getDoc(docRef).then((doc) => {
-// 		doc.data();
-// 	});
-// 	return singleBlog;
-// };
 
 // create blog post with first uploading the image to the cloud
 export const onSubmitBlogPost = async ({
@@ -53,7 +47,7 @@ export const onSubmitBlogPost = async ({
 	image,
 }) => {
 	try {
-		const storageRef = ref(storage, `images/${image.name}`);
+		const storageRef = ref(storage, `images/${image.name + v4()}`);
 		const uploadTask = uploadBytesResumable(storageRef, image);
 		uploadTask.on(
 			"state_changed",
@@ -69,9 +63,10 @@ export const onSubmitBlogPost = async ({
 							date,
 							category,
 							description,
-							imageUrls: url,
+							imageUrl: url,
 							userId: auth?.currentUser?.uid,
-							userName: auth?.currentUser?.displayName,
+							username: auth?.currentUser?.displayName,
+							userEmail: auth?.currentUser?.email,
 						});
 					} catch (error) {
 						console.log(error);
@@ -96,5 +91,27 @@ export const DeleteBlogPost = (id) => {
 		});
 };
 
-// updating blog post
+export const getBlogPostById = (id, callback) => {
+	const docRef = doc(db, "blogs", id);
+	onSnapshot(docRef, (doc) => {
+		callback(doc.data());
+	});
+};
 
+// update blog post
+export const updateBlogPost = (id, updatedPost) => {
+	const docRef = doc(db, "blogs", id);
+	try {
+		return updateDoc(docRef, updatedPost);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// getBlogByUser
+export const getUserBlogs = (id, callback) => {
+	const q = query(collection(db, "blogs"), where("userId", "==", id));
+	onSnapshot(q, (snapshot) => {
+		callback(snapshot);
+	});
+};

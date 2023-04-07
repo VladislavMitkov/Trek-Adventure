@@ -6,7 +6,7 @@ import { UserAuth } from "../context/AuthContext";
 const CreatePost = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const date = new Date();
   const [category, setCategory] = useState("mountain");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -17,7 +17,7 @@ const CreatePost = () => {
     e.preventDefault();
     onSubmitBlogPost({
       title,
-      date,
+      date: date.toLocaleString(),
       category,
       description,
       image,
@@ -53,12 +53,12 @@ const CreatePost = () => {
               />
             </div>
             <div className="flex gap-1">
-              <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
+              {/* <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
                 <label htmlFor="date" className="font-sans text-gray-800">
                   Date:
                 </label>
                 <input type="date" name="date" className="rounded-xl p-2 outline-none focus:shadow-blue-500 focus:shadow-lg" value={date} onChange={(e) => setDate(e.target.value)} />
-              </div>
+              </div> */}
               <div className="flex justify-center items-center mt-5 gap-3 border border-r-2 p-2 w-8/12 rounded-xl shadow-lg border-slate-500">
                 <label htmlFor="category" className="font-sans text-gray-800">
                   Category:

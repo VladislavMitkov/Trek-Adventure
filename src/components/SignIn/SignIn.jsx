@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import ErrorModal from "../ErrorModal/ErrorModal";
 
 // icons
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
-// toastify
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 //context
 import { UserAuth } from "../context/AuthContext";
+import { validateSignIn } from "./SignInValidation";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const notify = () => toast("You Signed In Successfully");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -22,35 +19,43 @@ const SignIn = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    if (password < 6) {
-      setError({
-        title: "Invalid or incorrect password.",
-        message: "Please enter a valid password.",
-      });
+    const isValid = validateSignIn(email, password, setError);
+    if (!isValid) {
+      return;
     }
     try {
-      await signIn(email, password);
-      navigate("/");
-      notify();
+      await signIn(email, password).then(() => {
+        navigate("/");
+      });
     } catch (err) {
-      alert(err.message);
+      setError("User with this email and/or password doesn't exist.");
     }
   };
 
   const handleSignInWithGoogle = async (e) => {
-    setError("");
     try {
-      await signInWithGoogle();
-      notify();
-      navigate("/");
+      await signInWithGoogle().then(() => {
+        navigate("/");
+      });
     } catch (error) {
-      setError(error.message);
+      setError(true);
+    }
+  };
+
+  // prevent user to enter spaces
+  const handleKeyDown = (e) => {
+    setError(false);
+    if (e.key === " ") {
+      setError({
+        title: "Invalid input!",
+        message: "Please don't use spaces.",
+      });
+      e.preventDefault();
     }
   };
 
   return (
     <>
-      {error && <ErrorModal onConfirm={() => setError(null)} title={error.title} message={error.message} />}
       <div className="h-screen">
         <div className=" box-border  flex justify-center mt-10">
           <div className="flex w-8/12 justify-center bg-slate-300 rounded-xl shadow-xl shadow-blue-100">
@@ -78,24 +83,26 @@ const SignIn = () => {
                     placeholder="email"
                     className=" border border-gray-400 py-1 px-2"
                     value={email}
+                    onKeyDown={handleKeyDown}
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
                   />
-                  
+                  {error && <p className=" text-red-700 font-light line-clamp-2">Please enter correct email.</p>}
                   <label htmlFor="password" className="text-gray-600 text-center font-sans font-semibold text-xl">
                     Password
                   </label>
-                  <input type="password" placeholder="password" className="border border-gray-400 py-1 px-2" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <input type="password" placeholder="password" className="border border-gray-400 py-1 px-2" value={password} onKeyDown={handleKeyDown} onChange={(e) => setPassword(e.target.value)} />
+                  {error && <p className=" text-red-700 font-light line-clamp-2">Invalid password</p>}
                   <button
                     type="submit"
                     className="flex justify-center items-center mt-5 mb-5 rounded-xl border border-r-2 p-2 shadow-lg border-blue-200  hover:scale-[1.5] transition duration-300 ease-in-out hover:shadow-blue-600"
                   >
                     Sign In
                   </button>
+                  {error && <p className="text-red-700 font-light">User with this email and/or password doesn't exist.</p>}
                 </div>
               </form>
-              <ToastContainer />
             </div>
           </div>
         </div>

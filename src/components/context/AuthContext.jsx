@@ -1,10 +1,12 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth, googleProvider } from "../../firebase/firebase";
+import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   // checking the current user
@@ -23,16 +25,18 @@ export const AuthContextProvider = ({ children }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password).catch((err) => console.log(err));
       await updateProfile(auth.currentUser, { displayName: username }).catch((err) => console.log(err));
+      navigate("profileInfo/:id");
     } catch (err) {
       console.log(err);
     }
   };
 
+
   const logout = () => {
     return signOut(auth);
   };
 
-  const signIn = ( email, password) => {
+  const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -44,7 +48,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  return <UserContext.Provider value={{ createUser, user, logout, signIn, signInWithGoogle }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ auth, createUser, user, logout, signIn, signInWithGoogle }}>{children}</UserContext.Provider>;
 };
 
 export const UserAuth = () => {

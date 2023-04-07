@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 //react-router
 import { Link } from "react-router-dom";
 // icons
 import { HiMenu } from "react-icons/hi";
-// toastify
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 // context
 import { UserAuth } from "../context/AuthContext";
@@ -13,8 +10,6 @@ const imageSrc = require("../../assets/logo.png");
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const notify = () => toast("You signed out", { autoClose: 2500, theme: "dark" });
 
   const { user, logout } = UserAuth();
 
@@ -41,7 +36,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      notify();
     } catch (err) {
       console.log(err.message);
     }
@@ -77,9 +71,6 @@ const Navbar = () => {
           {/*  if USER is logged  */}
           {user && (
             <>
-              {/* <div className="flex justify-center items-center mr-6 w-10 h-10 rounded-2xl border-nofull hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300 ease-in-out">
-                {profileImage && <img src={profileImage} alt="avatar" className="rounded-2xl" />}
-              </div> */}
               <Link className="p-2 mr-10 rounded-full hover:scale-[1.25] hover:shadow hover:shadow-blue-100 transition duration-300" to={`/profile/${user.uid}`}>
                 My Profile
               </Link>
@@ -96,7 +87,7 @@ const Navbar = () => {
               <Link className="p-2 border-t-2 w-full border-orange-300" to="/">
                 Home
               </Link>
-              <Link className="p-2 border-t-2 w-full border-orange-300" to="/xplore">
+              <Link className="p-2 border-t-2 w-full border-orange-300" to="/explore">
                 Explore
               </Link>
               <Link className="p-2 border-t-2 w-full border-orange-300" to="/myProfile">
@@ -112,7 +103,6 @@ const Navbar = () => {
           )}
         </div>
         <HiMenu className="md:hidden flex w-8 h-8 hover:cursor-pointer" onClick={handleClick} />
-        <ToastContainer />
       </div>
     </div>
   );
