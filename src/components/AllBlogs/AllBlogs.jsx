@@ -25,23 +25,23 @@ const AllBlogs = () => {
   };
 
   return (
-    <section className="justify-center flex flex-col">
+    <section className="justify-center flex flex-col md:h-screen">
       <h1 className="font-sans text-semibold text-gray-800 text-4xl text-center mb-5 rounded-xl border-b w-6/12 self-center">All Blogs</h1>
       <div className="container px-5 my-5 mx-auto">
-        <div className="flex gap-5 text-lg text-white justify-center mb-5">
-          <button className="rounded-full bg-teal-600 py-2 px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => setCategory(posts)}>
+        <div className="text-xs md:flex md:flex-row justify-center grid grid-cols-5 gap-1 md:text-lg text-white mb-5">
+          <button className="rounded-full bg-teal-600 py-2 md:px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => setCategory(posts)}>
             All
           </button>
-          <button className="rounded-full bg-teal-600 py-2 px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("mountain")}>
+          <button className="rounded-full bg-teal-600 py-2 md:px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("mountain")}>
             Mountain
           </button>
-          <button className="rounded-full bg-teal-600 py-2 px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("city")}>
+          <button className="rounded-full bg-teal-600 py-2 md:px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("city")}>
             City
           </button>
-          <button className="rounded-full bg-teal-600 py-2 px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("landmark")}>
+          <button className="rounded-full bg-teal-600 py-2 md:px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("landmark")}>
             Landmark
           </button>
-          <button className="rounded-full bg-teal-600 py-2 px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("hikingTrail")}>
+          <button className="rounded-full bg-teal-600 py-2 md:px-5 shadow-md hover:bg-teal-300 hover:scale-[1.15]" onClick={() => handleCategoryFilter("hikingTrail")}>
             Hiking trail
           </button>
         </div>
