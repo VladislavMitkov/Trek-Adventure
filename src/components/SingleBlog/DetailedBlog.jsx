@@ -9,6 +9,7 @@ const DetailedBlog = () => {
   const { id } = useParams();
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [blog, setBlog] = useState(null);
+  const [blogUserId, setBlogUserId] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,17 +19,19 @@ const DetailedBlog = () => {
     setIsLoading(true);
     getBlogPostById(id, (blogData) => {
       setBlog(blogData);
+      setBlogUserId(blogData.userId);
       setIsLoading(false);
     });
-    // checking if the the author of the blog is the same as currentUser
-    const currentUserCheck = async () => {
-      await user;
-      if (blog?.userId === user.uid) {
-        setIsCurrentUser(true);
-      }
-    };
-    currentUserCheck();
-  }, [id, blog?.userId, user]);
+  }, [id]);
+
+  // checking if the the author of the blog is the same as currentUser
+  useEffect(() => {
+    if (blogUserId && user && user.uid && blogUserId === user.uid) {
+      setIsCurrentUser(true);
+    } else {
+      setIsCurrentUser(false);
+    }
+  }, [blogUserId, user]);
 
   // handle delete
   const handleDeleteClick = () => {
@@ -72,7 +75,7 @@ const DetailedBlog = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col justify-center border truncate items-center w-[70%]">
+              <div className="flex flex-col justify-center border items-center w-[70%]">
                 <h1>{blog?.title}</h1>
                 <h2>{blog?.username}</h2>
                 <h3>{blog?.category}</h3>

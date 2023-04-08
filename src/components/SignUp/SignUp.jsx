@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom";
 // icons
 import { FcGoogle } from "react-icons/fc";
 import { UserAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
 import { validateForm } from "./SignUpValidation";
 
 const SignUp = () => {
-  const notify = () => toast("You Signed In Successfully");
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -24,11 +22,11 @@ const SignUp = () => {
       return;
     }
     try {
-      await createUser(username, email, password);
-      console.log()
-      navigate("/profileInfo");
+      await createUser(username, email, password).then(() => {
+        navigate("/");
+      });
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   };
   // prevent user to enter spaces
@@ -46,13 +44,11 @@ const SignUp = () => {
   const handleSignInWithGoogle = async (e) => {
     try {
       await signInWithGoogle();
-      notify();
       navigate("/");
     } catch (error) {
       console.log(error.message);
     }
   };
-
   return (
     <>
       <div className="h-screen">

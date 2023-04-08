@@ -19,6 +19,8 @@ export const addComment = async ({
 	content,
 	currentTime,
 	username,
+	userId,
+	userEmail,
 	blogId,
 }) => {
 	try {
@@ -26,6 +28,8 @@ export const addComment = async ({
 			content,
 			currentTime,
 			username,
+			userId,
+			userEmail,
 			blogId,
 		});
 	} catch (error) {

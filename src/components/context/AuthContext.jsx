@@ -23,14 +23,13 @@ export const AuthContextProvider = ({ children }) => {
   // create user with email and password
   const createUser = async (username, email, password) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password).catch((err) => console.log(err));
-      await updateProfile(auth.currentUser, { displayName: username }).catch((err) => console.log(err));
-      navigate("profileInfo/:id");
+      await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(auth.currentUser, { displayName: username });
+      navigate('/')
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   };
-
 
   const logout = () => {
     return signOut(auth);

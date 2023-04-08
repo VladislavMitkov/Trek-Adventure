@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { DeleteComment } from "../../firebase/CommentsApi";
 import { UserAuth } from "../context/AuthContext";
@@ -10,6 +10,7 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { user } = UserAuth();
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,10 +29,8 @@ const Comments = () => {
   }, [id]);
 
   const handleDeleteClick = (id) => {
-    console.log(id);
     DeleteComment(id);
   };
-  console.log(comments[0]);
 
   return (
     <div>
@@ -48,7 +47,7 @@ const Comments = () => {
                 <p>{com.username}</p>
                 <p>{com.currentTime}</p>
               </div>
-              {<button onClick={() => handleDeleteClick(com?.id)}>delete</button>}
+              {user?.email === com.userEmail && <button onClick={() => handleDeleteClick(com?.id)}>delete</button>}
             </div>
           ))}
         </section>

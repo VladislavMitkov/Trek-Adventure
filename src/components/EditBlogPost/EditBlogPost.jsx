@@ -15,10 +15,13 @@ const EditBlogPost = () => {
 
   useEffect(() => {
     getBlogPostById(id, setBlog);
-    setnewTitlte(blog?.title);
-    setNewCategory(blog?.category);
-    setNewDescription(blog?.description);
-  }, [id, blog?.title]);
+  }, [id]);
+
+  useEffect(() => {
+    setnewTitlte(blog?.title || "");
+    setNewCategory(blog?.category || "");
+    setNewDescription(blog?.description || "");
+  }, [blog]);
 
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
