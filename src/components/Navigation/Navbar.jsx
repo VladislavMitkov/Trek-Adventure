@@ -6,28 +6,13 @@ import { HiMenu } from "react-icons/hi";
 
 // context
 import { UserAuth } from "../context/AuthContext";
+
 const imageSrc = require("../../assets/logo.png");
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
 
   const { user, logout } = UserAuth();
-
-  // useEffect(() => {
-  //   async function downloadImage(url) {
-  //     const res = await fetch(url);
-  //     const blob = await res.blob();
-  //     const image = URL.createObjectURL(blob);
-  //     console.log("RUN");
-  //     setProfileImage(image);
-  //   }
-
-  //   if (user?.photoURL) {
-  //     downloadImage(user.photoURL);
-  //   } else {
-  //     setProfileImage(null);
-  //   }
-  // }, [user]);
 
   const handleClick = () => {
     setNav(!nav);
@@ -42,11 +27,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="shadow-xl mb-2 h-16 w-full flex items-center justify-between sticky top-0 bg-inherit">
+    <div className="mb-2 flex items-center justify-between sticky bg-teal-600">
       <header className="flex ml-5 justify-center items-center">
         <Link to="/">
-          <img src={imageSrc} alt="logo" className="w-20 h-16" />
+          <img src={imageSrc} alt="logo" className="w-20 h-16 lg:mx-6" />
         </Link>
+        <span className="lg:text-2xl font-semibold font-sans">TrekAdventure.</span>
       </header>
       <div className="flex items-center mr-10 text-xl font-sans font-semibold ">
         <nav className="md:flex hidden  justify-center items-center">

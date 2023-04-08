@@ -19,7 +19,7 @@ const DetailedBlog = () => {
     setIsLoading(true);
     getBlogPostById(id, (blogData) => {
       setBlog(blogData);
-      setBlogUserId(blogData.userId);
+      setBlogUserId(blogData?.userId);
       setIsLoading(false);
     });
   }, [id]);
@@ -41,20 +41,7 @@ const DetailedBlog = () => {
 
   return (
     <>
-      {deleteModal && (
-        <div>
-          <div className="relative rounded-lg shadow ">
-            <h1>Are you sure you want to delete this post?</h1>
-          </div>
-          <button onClick={handleDeleteClick} className="shadow-xl p-5 shadow-gray-500 rounded-xl m-2 hover:bg-red-500">
-            Delete
-          </button>
-          <button onClick={() => setDeleteModal(false)} className="shadow-xl p-5 shadow-gray-500 rounded-xl m-2 hover:bg-green-500">
-            Cancel
-          </button>
-        </div>
-      )}
-      <div className="h-screen">
+      <div className="font-sans bg-slate-50">
         {isLoading ? (
           <div className=" mt-56 w-screen justify-center text-center">
             <p className="text-gray-800 text-4xl font-semibold">Loading...</p>
@@ -63,24 +50,52 @@ const DetailedBlog = () => {
           <>
             <main>
               <div className="flex justify-center">
-                <img src={blog?.imageUrl} loading="lazy" className="w-[500px] h-[333] m-auto" alt="" />
+                <img src={blog?.imageUrl} loading="lazy" className="w-[500px] h-[333] rounded-xl" alt="" />
+              </div>
+              <div className="flex justify-center">
                 {isCurrentUser && (
-                  <div className="flex flex-col">
-                    <Link to={`/editBlogPost/${id}`} className="shadow-xl shadow-gray-500 rounded-xl mr-3 mt-3 hover:bg-green-200 p-5 flex justify-center items-center">
+                  <div className="flex gap-5 my-2">
+                    <Link to={`/editBlogPost/${id}`} className="shadow rounded-xl bg-teal-700 hover:bg-teal-300 text-white p-1 px-2 transition-all ease-in-out duration-300">
                       EDIT
                     </Link>
-                    <button onClick={() => setDeleteModal(true)} className="shadow-xl shadow-gray-500 rounded-xl mr-3 mt-5 hover:bg-red-300 p-5 flex justify-center items-center">
+                    <button onClick={() => setDeleteModal(true)} className="shadow bg-red-700 hover:bg-red-500 text-white rounded-xl p-1 px-2 transition-all ease-in-out duration-300">
                       DELETE
                     </button>
                   </div>
                 )}
               </div>
-              <div className="flex flex-col justify-center border items-center w-[70%]">
-                <h1>{blog?.title}</h1>
-                <h2>{blog?.username}</h2>
-                <h3>{blog?.category}</h3>
-                <p>{blog?.date}</p>
-                <p className="line-clamp-3">{blog?.description}</p>
+              {deleteModal && (
+                <div className="flex justify-center items-center">
+                  <div className="">
+                    <h1 className="text-red-700 font-semibold">Are you sure you want to delete this post?</h1>
+                  </div>
+                  <button onClick={handleDeleteClick} className="shadow p-1 px-2 rounded-xl m-2 text-white bg-red-700 hover:bg-red-500">
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setDeleteModal(false)}
+                    className="shadow p-1 px-2 bg-teal-600 text-white hover:bg-teal-300  shadow-gray-500 rounded-xl m-2 transition-all ease-in-out duration-300"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+              <div className="flex flex-col justify-center items-center bg-slate-50">
+                <h1 className="text-xl font-semibold text-center ">{blog?.title}</h1>
+                <div className="flex justify-between w-8/12">
+                  <div className="flex justify-center items-center">
+                    <span className="mr-2">Created by:</span>
+                    <h2 className="text-xl ">{blog?.username}</h2>
+                  </div>
+                  <div className="flex justify-center items-center text-gray-800">
+                    <span className="mr-2">Category:</span>
+                    <h3>{blog?.category}</h3>
+                  </div>
+                </div>
+                <div className="flex justify-end items-end w-8/12 text-gray-800 ">
+                  <p>{blog?.date}</p>
+                </div>
+                <p className="line-clamp-10 mb-5  border-b text-gray-800 mt-2">{blog?.description}</p>
               </div>
             </main>
             <AddComment />

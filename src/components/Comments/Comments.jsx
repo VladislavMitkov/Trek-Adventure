@@ -35,19 +35,25 @@ const Comments = () => {
   return (
     <div>
       {isLoading ? (
-        <div>
+        <div className="text-gray-800 font-semibold text-xl">
           <p>Loading comments...</p>
         </div>
       ) : (
-        <section className="m-10  rounded-xl shadow-2xl shadow-amber-700">
+        <section className="m-10  rounded-xl shadow shadow-teal-600">
           {comments.map((com) => (
-            <div key={com.id} className="flex justify-between rounded-b-xl p-3 shadow-md shadow-amber-100">
-              <div>
-                <p>{com.content}</p>
-                <p>{com.username}</p>
-                <p>{com.currentTime}</p>
+            <div key={com.id} className="flex justify-between rounded-b-xl p-2 shadow-md shadow-teal-600">
+              <div className="flex flex-col justify-center w-full">
+                <p className="text-lg font-semibold pl-5 line-clamp-5 border-b">{com.content}</p>
+                <div className="flex justify-start items-center">
+                  <p className="text-gray-800 font-normal mx-2">{com.username}</p>
+                  <p className="text-gray-800 font-normal">{com.currentTime}</p>
+                </div>
               </div>
-              {user?.email === com.userEmail && <button onClick={() => handleDeleteClick(com?.id)}>delete</button>}
+              {user?.email === com.userEmail && (
+                <button onClick={() => handleDeleteClick(com?.id)} className="text-white bg-red-700 rounded-xl p-2 m-2">
+                  delete
+                </button>
+              )}
             </div>
           ))}
         </section>

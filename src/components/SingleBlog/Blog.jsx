@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DeleteBlogPost } from "../../firebase/postsApi";
 
+import { AiOutlineRight } from "react-icons/ai";
+
 const Blog = ({ blogPosts, isCurrentUser }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
-  const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
     const settingBlogs = () => {
@@ -21,60 +22,55 @@ const Blog = ({ blogPosts, isCurrentUser }) => {
   };
 
   return (
-    <>
+    <section className="justify-center flex flex-col">
       {isLoading ? (
         <div className="m-auto mt-36 w-screen">
           <p className="text-4xl font-bold text-gray-800">Loading posts...</p>
         </div>
       ) : (
-        <>
-          {blogs?.map((blog) => (
-            <div className="bg-blue-200 m-5" key={blog.id}>
-              <div className="bg-gray-500 flex min-w-screen">
-                {/* image */}
-                <div className=" rounded-xl bg-green-300 m-5 w-1/2 overflow-hidden">
-                  <img src={blog.imageUrl} alt="Blog post" className="w-full h-full object-cover" />
-                </div>
-                {/* Description */}
-                <div className="mx-5 flex flex-col w-1/2">
-                  <Link to={`/fullBlogPost/${blog.id}`} className="text-3xl font-semibold pb-2 border-b text-center hover:cursor-pointer hover:text-blue-900">
-                    {blog.title}
-                  </Link>
-                  <p className="text-xl pt-2">Created by:</p>
-                  <h1 className="text-blue-200 text-2xl font-semibold">{blog.username}</h1>
-                  <span>{blog.category}</span>
-                  <p className="text-gray-800 pt-2">Description:</p>
-                  <p className="truncate text-xl">{blog.description}</p>
-                  {deleteModal && (
-                    <div>
-                      <div className="relative rounded-lg shadow ">
-                        <h1>Are you sure you want to delete this post?</h1>
+        <div className="container px-5 my-5 mx-auto">
+          <div className="flex flex-wrap -m-4">
+            {blogs.map((blog) => (
+              <div className="p-2 md:w-1/3 flex flex-col justify-center" key={blog.id}>
+                <div className="h-full bg-slate-50 shadow-xl rounded-lg">
+                  <img className="lg:h-[400px] md:h-36 w-full object-cover overflow-hidden p-2 rounded-xl" loading="lazy" src={blog.imageUrl} alt="post" />
+                  <div className="p-2 justify-center items-center">
+                    <div className="flex justify-between">
+                      <h2 className="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">CATEGORY : {blog.category}</h2>
+                      {isCurrentUser && (
+                        <div>
+                          <Link to={`/editBlogPost/${blog.id}`} className="bg-teal-600 text-white rounded-xl p-1 px-2 ml-2 hover:bg-teal-300 transition-all ease-in-out duration-300">
+                            EDIT
+                          </Link>
+                          <button onClick={() => handleDeleteClick(blog.id)} className="bg-red-700 text-white rounded-xl p-1 px-2 ml-2 hover:bg-red-400 transition-all ease-in-out duration-300">
+                            DELETE
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <Link to={`/detailedBlog/${blog.id}`} className="text-3xl font-semibold pb-2 text-center hover:cursor-pointer">
+                      {blog.title}
+                    </Link>
+                    <div className="flex gap-2 items-center">
+                      <p>Created by:</p>
+                      <h2 className="title-font text-lg font-medium">{blog.username}</h2>
+                    </div>
+                    <p className=" line-clamp-2 p-2">{blog.description}</p>
+                    <Link to={`/detailedBlog/${blog.id}`} className="flex items-center flex-wrap justify-center md:mb-2 lg:mb-0">
+                      <div className="bg-teal-600 text-white p-2 flex justify-center items-center rounded-xl px-6 hover:bg-teal-300 transition-all ease-in-out duration-300 cursor-pointer">
+                        Check it out
+                        <AiOutlineRight className="w-4 h-4 ml-2" />
                       </div>
-                      <button onClick={() => handleDeleteClick(blog.id)} className="shadow-xl p-5 shadow-gray-500 rounded-xl m-2 hover:bg-red-500">
-                        Delete
-                      </button>
-                      <button onClick={() => setDeleteModal(false)} className="shadow-xl p-5 shadow-gray-500 rounded-xl m-2 hover:bg-green-500">
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-                  {isCurrentUser && (
-                    <div>
-                      <Link to={`/editBlogPost/${blog.id}`} className="shadow-xl shadow-gray-500 rounded-xl mr-3 mt-3 hover:bg-green-200 p-5 flex justify-center items-center">
-                        EDIT
-                      </Link>
-                      <button onClick={() => setDeleteModal(true)} className="shadow-xl shadow-gray-500 rounded-xl mr-3 mt-5 hover:bg-red-300 p-5 flex justify-center items-center">
-                        DELETE
-                      </button>
-                    </div>
-                  )}
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </>
+            ))}
+          </div>
+        </div>
       )}
-    </>
+    </section>
   );
 };
 

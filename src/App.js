@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 // react router
 import { Routes, Route } from "react-router-dom";
 //components
@@ -13,15 +13,15 @@ import EditBlogPost from "./components/EditBlogPost/EditBlogPost";
 import DetailedBlog from "./components/SingleBlog/DetailedBlog";
 import AllBlogs from "./components/AllBlogs/AllBlogs";
 
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 // context
 import { AuthContextProvider } from "./components/context/AuthContext";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
 	return (
 		<>
 			<AuthContextProvider>
-				<div className="relative flex flex-col h-full bg-slate-400">
+				<div className="flex flex-col h-screen">
 					<Navbar />
 					<Routes>
 						<Route path='/' element={<Home />} />
@@ -31,11 +31,11 @@ function App() {
 							<Route path='/profile/:id' element={<Profile />} />
 							<Route path='/explore' element={<AllBlogs />} />
 							<Route path='/createPost' element={<CreatePost />} />
-							<Route path="/fullBlogPost/:id" element={<DetailedBlog />} />
+							<Route path="/detailedBlog/:id" element={<DetailedBlog />} />
 							<Route path="/editBlogPost/:id" element={<EditBlogPost />} />
 						</Route>
 					</Routes>
-					<div className=" insent-x-0 bottom-0 justify-center w-full ">
+					<div className="insent-x-0 bottom-0 justify-center w-full">
 						<Footer />
 					</div>
 				</div>
