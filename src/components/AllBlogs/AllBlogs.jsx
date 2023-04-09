@@ -25,7 +25,7 @@ const AllBlogs = () => {
   };
 
   return (
-    <section className="justify-center flex flex-col md:h-screen">
+    <section className="justify-center flex flex-col">
       <h1 className="font-sans text-semibold text-gray-800 text-4xl text-center mb-5 rounded-xl border-b w-6/12 self-center">All Blogs</h1>
       <div className="container px-5 my-5 mx-auto">
         <div className="text-xs md:flex md:flex-row justify-center grid grid-cols-5 gap-1 md:text-lg text-white mb-5">
